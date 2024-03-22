@@ -1,4 +1,4 @@
-package test
+package waitgroup
 
 import (
 	"fmt"
@@ -17,29 +17,13 @@ func AwaitGoroutineByWaitGroup() {
 		}()
 	}
 
+	fmt.Println("-> Waiting all tasks done")
 	wg.Wait()
+	fmt.Println("-> Done!")
 }
 
 func anyProcessingTaskWithoutCh(id int) {
 	fmt.Println("---> Starting recursive task: ", id)
 	time.Sleep(2 * time.Second)
 	fmt.Println("---> Recursive task done!")
-}
-
-func AwaitGoroutineByWaitGroup2() {
-	wg := &sync.WaitGroup{}
-	for i := 0; i < 100; i++ {
-		wg.Add(1)
-		i := i
-		go anyProcessingTaskWithWaitGroup(i, wg)
-	}
-
-	wg.Wait()
-}
-
-func anyProcessingTaskWithWaitGroup(id int, wg *sync.WaitGroup) {
-	defer wg.Done()
-	fmt.Println("---> Starting recursive task: ", id)
-	time.Sleep(2 * time.Second)
-	fmt.Println("---> Recursive task done: ", id)
 }
